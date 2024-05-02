@@ -1131,3 +1131,125 @@
 2024-05-01 10:39:00,228 - Lekkertesten - INFO - start-dec-cp-r0.2-lay[54, 51]-ind5
 2024-05-01 10:50:07,472 - Lekkertesten - INFO - end-dec-cp-r0.2-lay[54, 51]-ind5
 2024-05-01 10:50:07,472 - Lekkertesten - INFO - end-dec-cp-r0.2-lay[54, 51]-ind5
+2024-05-01 21:16:00,088 - Lekkertesten - INFO - start-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind1
+2024-05-01 21:17:22,363 - Lekkertesten - INFO - end-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind1
+2024-05-01 21:26:00,864 - Lekkertesten - INFO - start-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind1
+2024-05-01 21:26:00,864 - Lekkertesten - INFO - start-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind1
+2024-05-01 21:37:49,489 - Lekkertesten - INFO - end-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind1
+2024-05-01 21:37:49,489 - Lekkertesten - INFO - end-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind1
+2024-05-01 21:44:00,892 - Lekkertesten - INFO - start-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind2
+2024-05-01 21:44:00,892 - Lekkertesten - INFO - start-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind2
+2024-05-01 21:55:54,222 - Lekkertesten - INFO - end-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind2
+2024-05-01 21:55:54,222 - Lekkertesten - INFO - end-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind2
+2024-05-01 22:02:00,581 - Lekkertesten - INFO - start-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind3
+2024-05-01 22:02:00,581 - Lekkertesten - INFO - start-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind3
+2024-05-01 22:13:51,908 - Lekkertesten - INFO - end-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind3
+2024-05-01 22:13:51,908 - Lekkertesten - INFO - end-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind3
+2024-05-01 22:20:00,360 - Lekkertesten - INFO - start-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind4
+2024-05-01 22:20:00,360 - Lekkertesten - INFO - start-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind4
+2024-05-01 22:31:50,863 - Lekkertesten - INFO - end-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind4
+2024-05-01 22:31:50,863 - Lekkertesten - INFO - end-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind4
+2024-05-01 22:38:00,389 - Lekkertesten - INFO - start-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind5
+2024-05-01 22:38:00,389 - Lekkertesten - INFO - start-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind5
+2024-05-01 22:49:52,783 - Lekkertesten - INFO - end-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind5
+2024-05-01 22:49:52,783 - Lekkertesten - INFO - end-dec-cp-r[0.3, 0.2]-lay[54, 51]-ind5
+2024-05-01 22:55:00,770 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[60, 51]-ind1
+2024-05-01 22:55:00,770 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[60, 51]-ind1
+2024-05-01 23:05:44,456 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[60, 51]-ind1
+2024-05-01 23:05:44,456 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[60, 51]-ind1
+2024-05-01 23:11:00,240 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[60, 51]-ind2
+2024-05-01 23:11:00,240 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[60, 51]-ind2
+2024-05-01 23:21:47,304 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[60, 51]-ind2
+2024-05-01 23:21:47,304 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[60, 51]-ind2
+2024-05-01 23:27:00,104 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[60, 51]-ind3
+2024-05-01 23:27:00,104 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[60, 51]-ind3
+2024-05-01 23:37:45,661 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[60, 51]-ind3
+2024-05-01 23:37:45,661 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[60, 51]-ind3
+2024-05-01 23:43:00,105 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[60, 51]-ind4
+2024-05-01 23:43:00,105 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[60, 51]-ind4
+2024-05-01 23:53:45,040 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[60, 51]-ind4
+2024-05-01 23:53:45,040 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[60, 51]-ind4
+2024-05-01 23:59:00,816 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[60, 51]-ind5
+2024-05-01 23:59:00,816 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[60, 51]-ind5
+2024-05-02 00:09:48,436 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[60, 51]-ind5
+2024-05-02 00:09:48,436 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[60, 51]-ind5
+2024-05-02 00:15:00,308 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 51]-ind1
+2024-05-02 00:15:00,308 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 51]-ind1
+2024-05-02 00:25:48,531 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 51]-ind1
+2024-05-02 00:25:48,531 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 51]-ind1
+2024-05-02 00:31:00,060 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 51]-ind2
+2024-05-02 00:31:00,060 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 51]-ind2
+2024-05-02 00:41:45,299 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 51]-ind2
+2024-05-02 00:41:45,299 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 51]-ind2
+2024-05-02 00:47:00,602 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 51]-ind3
+2024-05-02 00:47:00,602 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 51]-ind3
+2024-05-02 00:57:48,179 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 51]-ind3
+2024-05-02 00:57:48,179 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 51]-ind3
+2024-05-02 01:03:00,932 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 51]-ind4
+2024-05-02 01:03:00,932 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 51]-ind4
+2024-05-02 01:13:46,514 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 51]-ind4
+2024-05-02 01:13:46,514 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 51]-ind4
+2024-05-02 01:19:01,011 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 51]-ind5
+2024-05-02 01:19:01,011 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 51]-ind5
+2024-05-02 01:29:45,484 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 51]-ind5
+2024-05-02 01:29:45,484 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 51]-ind5
+2024-05-02 01:35:00,776 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 54]-ind1
+2024-05-02 01:35:00,776 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 54]-ind1
+2024-05-02 01:47:08,890 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 54]-ind1
+2024-05-02 01:47:08,890 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 54]-ind1
+2024-05-02 01:53:00,052 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 54]-ind2
+2024-05-02 01:53:00,052 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 54]-ind2
+2024-05-02 02:05:06,571 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 54]-ind2
+2024-05-02 02:05:06,571 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 54]-ind2
+2024-05-02 02:11:00,836 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 54]-ind3
+2024-05-02 02:11:00,836 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 54]-ind3
+2024-05-02 02:23:07,645 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 54]-ind3
+2024-05-02 02:23:07,645 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 54]-ind3
+2024-05-02 02:29:00,626 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 54]-ind4
+2024-05-02 02:29:00,626 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 54]-ind4
+2024-05-02 02:41:10,174 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 54]-ind4
+2024-05-02 02:41:10,174 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 54]-ind4
+2024-05-02 02:47:01,001 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 54]-ind5
+2024-05-02 02:47:01,001 - Lekkertesten - INFO - start-dec-cp-r0.1-lay[63, 54]-ind5
+2024-05-02 02:59:11,688 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 54]-ind5
+2024-05-02 02:59:11,688 - Lekkertesten - INFO - end-dec-cp-r0.1-lay[63, 54]-ind5
+2024-05-02 03:05:00,724 - Lekkertesten - INFO - start-dec-tucker-r0.1-lay[51]-ind1
+2024-05-02 03:05:00,724 - Lekkertesten - INFO - start-dec-tucker-r0.1-lay[51]-ind1
+2024-05-02 03:15:56,400 - Lekkertesten - INFO - end-dec-tucker-r0.1-lay[51]-ind1
+2024-05-02 03:15:56,400 - Lekkertesten - INFO - end-dec-tucker-r0.1-lay[51]-ind1
+2024-05-02 03:21:00,140 - Lekkertesten - INFO - start-dec-tucker-r0.1-lay[51]-ind2
+2024-05-02 03:21:00,140 - Lekkertesten - INFO - start-dec-tucker-r0.1-lay[51]-ind2
+2024-05-02 03:31:56,022 - Lekkertesten - INFO - end-dec-tucker-r0.1-lay[51]-ind2
+2024-05-02 03:31:56,022 - Lekkertesten - INFO - end-dec-tucker-r0.1-lay[51]-ind2
+2024-05-02 03:37:00,919 - Lekkertesten - INFO - start-dec-tucker-r0.1-lay[51]-ind3
+2024-05-02 03:37:00,919 - Lekkertesten - INFO - start-dec-tucker-r0.1-lay[51]-ind3
+2024-05-02 03:47:54,737 - Lekkertesten - INFO - end-dec-tucker-r0.1-lay[51]-ind3
+2024-05-02 03:47:54,737 - Lekkertesten - INFO - end-dec-tucker-r0.1-lay[51]-ind3
+2024-05-02 03:53:00,508 - Lekkertesten - INFO - start-dec-tucker-r0.1-lay[51]-ind4
+2024-05-02 03:53:00,508 - Lekkertesten - INFO - start-dec-tucker-r0.1-lay[51]-ind4
+2024-05-02 04:03:54,371 - Lekkertesten - INFO - end-dec-tucker-r0.1-lay[51]-ind4
+2024-05-02 04:03:54,371 - Lekkertesten - INFO - end-dec-tucker-r0.1-lay[51]-ind4
+2024-05-02 04:09:00,511 - Lekkertesten - INFO - start-dec-tucker-r0.1-lay[51]-ind5
+2024-05-02 04:09:00,511 - Lekkertesten - INFO - start-dec-tucker-r0.1-lay[51]-ind5
+2024-05-02 04:19:55,349 - Lekkertesten - INFO - end-dec-tucker-r0.1-lay[51]-ind5
+2024-05-02 04:19:55,349 - Lekkertesten - INFO - end-dec-tucker-r0.1-lay[51]-ind5
+2024-05-02 04:25:00,647 - Lekkertesten - INFO - start-dec-tt-r0.1-lay[51]-ind1
+2024-05-02 04:25:00,647 - Lekkertesten - INFO - start-dec-tt-r0.1-lay[51]-ind1
+2024-05-02 04:35:36,241 - Lekkertesten - INFO - end-dec-tt-r0.1-lay[51]-ind1
+2024-05-02 04:35:36,241 - Lekkertesten - INFO - end-dec-tt-r0.1-lay[51]-ind1
+2024-05-02 04:41:00,635 - Lekkertesten - INFO - start-dec-tt-r0.1-lay[51]-ind2
+2024-05-02 04:41:00,635 - Lekkertesten - INFO - start-dec-tt-r0.1-lay[51]-ind2
+2024-05-02 04:51:31,404 - Lekkertesten - INFO - end-dec-tt-r0.1-lay[51]-ind2
+2024-05-02 04:51:31,404 - Lekkertesten - INFO - end-dec-tt-r0.1-lay[51]-ind2
+2024-05-02 04:56:00,975 - Lekkertesten - INFO - start-dec-tt-r0.1-lay[51]-ind3
+2024-05-02 04:56:00,975 - Lekkertesten - INFO - start-dec-tt-r0.1-lay[51]-ind3
+2024-05-02 05:06:32,917 - Lekkertesten - INFO - end-dec-tt-r0.1-lay[51]-ind3
+2024-05-02 05:06:32,917 - Lekkertesten - INFO - end-dec-tt-r0.1-lay[51]-ind3
+2024-05-02 05:11:00,889 - Lekkertesten - INFO - start-dec-tt-r0.1-lay[51]-ind4
+2024-05-02 05:11:00,889 - Lekkertesten - INFO - start-dec-tt-r0.1-lay[51]-ind4
+2024-05-02 05:21:33,628 - Lekkertesten - INFO - end-dec-tt-r0.1-lay[51]-ind4
+2024-05-02 05:21:33,628 - Lekkertesten - INFO - end-dec-tt-r0.1-lay[51]-ind4
+2024-05-02 05:26:00,929 - Lekkertesten - INFO - start-dec-tt-r0.1-lay[51]-ind5
+2024-05-02 05:26:00,929 - Lekkertesten - INFO - start-dec-tt-r0.1-lay[51]-ind5
+2024-05-02 05:36:34,301 - Lekkertesten - INFO - end-dec-tt-r0.1-lay[51]-ind5
+2024-05-02 05:36:34,301 - Lekkertesten - INFO - end-dec-tt-r0.1-lay[51]-ind5
