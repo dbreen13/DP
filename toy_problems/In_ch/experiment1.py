@@ -23,7 +23,7 @@ from datetime import datetime
 
 logging.basicConfig(level = logging.INFO)
 
-device = torch.device('cpu')
+device = torch.device('cuda')
     
 logger=logging.getLogger('Layertest_exp1')
 #create a fh
@@ -147,7 +147,7 @@ img_h, img_w=[4,4]
 kernel=3
 padding=1
 stride=1
-out_chan=48
+out_chan=512
 batch=128
 num_classes=10
 n_epochs=57000
@@ -170,12 +170,13 @@ decompose=True
 
 #create loop with all values to be determined
 
-for in_ch in [16,32,64,128]:
+for in_ch in [64,128,256,512]:
         cnn_dict.update({"in_channels": in_ch})
-        with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+        with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
             x = pickle.load(f)
 
         x=x.float()
+        x.to(device)
         for method in methods:
             if method=='nd':
                 fact_dict={"decompose":False, "factorization":'c', "rank":0}

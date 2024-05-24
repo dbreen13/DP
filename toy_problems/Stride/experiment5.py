@@ -23,7 +23,7 @@ from datetime import datetime
 
 logging.basicConfig(level = logging.INFO)
 
-device = torch.device('cpu')
+device = torch.device('cuda')
 
 
 logger=logging.getLogger('Layertest_exp3')
@@ -149,8 +149,8 @@ img_w=8
 img_h=8
 padding=1
 stride=1
-in_chan=16
-out_chan=16
+in_chan=64
+out_chan=64
 batch=128
 num_classes=10
 n_epochs=50000
@@ -176,9 +176,10 @@ decompose=True
 
 for stride in [1,2]:
     cnn_dict.update({"stride":stride})
-    with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
     x=x.float()
+    x.to(device)
     for method in methods:
         if method=='nd':
             fact_dict={"decompose":False, "factorization":'c', "rank":0}
