@@ -19,6 +19,7 @@ import time as timers
 from time import time, perf_counter
 import time as timers
 from datetime import datetime
+from tqdm import tqdm
 
 mean_CIFAR10 = [0.49139968, 0.48215841, 0.44653091]
 std_CIFAR10 = [0.24703223, 0.24348513, 0.26158784]
@@ -31,7 +32,7 @@ transform = transforms.Compose([
         ),
     ])
 
-testset = datasets.CIFAR10(root='/home/dbreen/Documents/tddl/bigdata/cifar10', train=True,download=False, transform=transform)
+testset = datasets.CIFAR10(root='/home/dbreen/Documents/tddl/bigdata/cifar10', train=False,download=False, transform=transform)
 batch_size=128
 testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
                                          shuffle=False, num_workers=8)
@@ -58,12 +59,12 @@ correct = 0
 total = 0
 # since we're not training, we don't need to calculate the gradients for our outputs
 with torch.no_grad():
-    timers.sleep(60)
-    now=datetime.now()
-    sec_wait=60-now.second
-    timers.sleep(sec_wait)
-    logger.info('start-inf-base-cif' )
-    for i in range(3):
+    for i in [1,2,3]:
+        timers.sleep(60)
+        now=datetime.now()
+        sec_wait=60-now.second
+        timers.sleep(sec_wait)
+        logger.info(f'start-inf-base-cif-ind{i}' )
         for data in testloader:
             images, labels = data
             images = images.to(device)  # Move input data to the same device as the model
@@ -74,8 +75,7 @@ with torch.no_grad():
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
-        i+=1
-    logger.info('end-inf-base-cif' )
+        logger.info(f'end-inf-base-cif-ind{i}' )
     
 
     
@@ -96,14 +96,15 @@ for method in methods:
             total = 0
             # since we're not training, we do{n't need to calculate the gradients for our outputs
             with torch.no_grad():
-                timers.sleep(60)
-                now=datetime.now()
-                sec_wait=60-now.second
-                timers.sleep(sec_wait)
-
-                logger.info(f'start-inf-{method}-r{compr}-lay[{layer}]' )
-                for i in range(3):
-                    for data in testloader:
+                for i in [1,2,3]:
+                    timers.sleep(60)
+                    now=datetime.now()
+                    sec_wait=60-now.second
+                    timers.sleep(sec_wait)
+    
+                    logger.info(f'start-inf-{method}-r{compr}-lay[{layer}]-ind{i}' )
+                    t = tqdm(testloader, total=int(len(testloader)))
+                    for _ , data in enumerate(testloader):
                         images, labels = data
                         images = images.to(device)  # Move input data to the same device as the model
                         labels = labels.to(device)  # Move labels to the same device as the model
@@ -113,7 +114,6 @@ for method in methods:
                         _, predicted = torch.max(outputs.data, 1)
                         total += labels.size(0)
                         correct += (predicted == labels).sum().item()
-                    i+=1
-                logger.info(f'end-inf-{method}-r{compr}-lay[{layer}]' )
+                    logger.info(f'end-inf-{method}-r{compr}-lay[{layer}]' )
 
 
