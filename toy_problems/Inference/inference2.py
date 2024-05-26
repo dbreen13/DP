@@ -64,6 +64,7 @@ with torch.no_grad():
         now=datetime.now()
         sec_wait=60-now.second
         timers.sleep(sec_wait)
+        print('hello')
         logger.info(f'start-inf-base-cif-ind{i}' )
         for data in testloader:
             images, labels = data
