@@ -70,53 +70,57 @@ for method in methods:
             # since we're not training, we do{n't need to calculate the gradients for our outputs
             with torch.no_grad():
                 for i in [1,2,3]:
+
                     timers.sleep(60)
                     now=datetime.now()
                     sec_wait=60-now.second
                     timers.sleep(sec_wait)
+                    
     
                     logger.info(f'start-inf-{method}-r{compr}-lay[{layer}]-ind{i}' )
-                    t = tqdm(testloader, total=int(len(testloader)))
-                    for i , data in enumerate(t):
-                        images, labels = data
-                        images = images.to(device)  # Move input data to the same device as the model
-                        labels = labels.to(device)  # Move labels to the same device as the model
-                        # calculate outputs by running images through the network
-                        outputs = model(images)
-                        # the class with the highest energy is what we choose as prediction
-                        _, predicted = torch.max(outputs.data, 1)
-                        total += labels.size(0)
-                        correct += (predicted == labels).sum().item()
+                    for s in range(12):
+                        t = tqdm(testloader, total=int(len(testloader)))
+                        
+                        for i , data in enumerate(t):
+                            images, labels = data
+                            images = images.to(device)  # Move input data to the same device as the model
+                            labels = labels.to(device)  # Move labels to the same device as the model
+                            # calculate outputs by running images through the network
+                            outputs = model(images)
+                            # the class with the highest energy is what we choose as prediction
+                            _, predicted = torch.max(outputs.data, 1)
+                            total += labels.size(0)
+                            correct += (predicted == labels).sum().item()
                     logger.info(f'end-inf-{method}-r{compr}-lay[{layer}]-ind{i}' )
 
 
-#baseline
-path="/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/baselines/baseline-rn18-cifar10-b128/runnr1/rn18_18_dNone_128_adam_l0.001_g0.1_w0.0_sFalse/cnn_final.pth"   
-model=torch.load(path)
-model.eval()
+# #baseline
+# path="/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/baselines/baseline-rn18-cifar10-b128/runnr1/rn18_18_dNone_128_adam_l0.001_g0.1_w0.0_sFalse/cnn_final.pth"   
+# model=torch.load(path)
+# model.eval()
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
-# since we're not training, we don't need to calculate the gradients for our outputs
-correct = 0
-total = 0
-# since we're not training, we don't need to calculate the gradients for our outputs
-with torch.no_grad():
-    for i in [1,2,3]:
-        timers.sleep(60)
-        now=datetime.now()
-        sec_wait=60-now.second
-        timers.sleep(sec_wait)
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# model.to(device)
+# # since we're not training, we don't need to calculate the gradients for our outputs
+# correct = 0
+# total = 0
+# # since we're not training, we don't need to calculate the gradients for our outputs
+# with torch.no_grad():
+#     for i in [1,2,3]:
+#         timers.sleep(60)
+#         now=datetime.now()
+#         sec_wait=60-now.second
+#         timers.sleep(sec_wait)
 
-        logger.info(f'start-inf-base-cif-ind{i}' )
-        for data in testloader:
-            images, labels = data
-            images = images.to(device)  # Move input data to the same device as the model
-            labels = labels.to(device)  # Move labels to the same device as the model
-            # calculate outputs by running images through the network
-            outputs = model(images)
-            # the class with the highest energy is what we choose as prediction
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-        logger.info(f'end-inf-base-cif-ind{i}' )
+#         logger.info(f'start-inf-base-cif-ind{i}' )
+#         for data in testloader:
+#             images, labels = data
+#             images = images.to(device)  # Move input data to the same device as the model
+#             labels = labels.to(device)  # Move labels to the same device as the model
+#             # calculate outputs by running images through the network
+#             outputs = model(images)
+#             # the class with the highest energy is what we choose as prediction
+#             _, predicted = torch.max(outputs.data, 1)
+#             total += labels.size(0)
+#             correct += (predicted == labels).sum().item()
+#         logger.info(f'end-inf-base-cif-ind{i}' )
