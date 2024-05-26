@@ -32,12 +32,15 @@ transform = transforms.Compose([
         ),
     ])
 
-testset = datasets.CIFAR10(root='/home/dbreen/Documents/tddl/bigdata/cifar10', train=False,download=False, transform=transform)
+testset = datasets.CIFAR10(root='/home/dbreen/Documents/tddl/bigdata/cifar10', train=True,download=False, transform=transform)
+
 batch_size=128
 testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
                                          shuffle=False, num_workers=8)
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+
+logging.basicConfig(level = logging.INFO)
 
 logger=logging.getLogger('Inferencefin')
 #create a fh
@@ -57,7 +60,7 @@ methods=['cp','tt', 'tucker']
 for method in methods:
     for layer in layers:
         for compr in compression:
-            path=f"/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/decomposed/fact-{method}-r{compr}-lay[{layer}]-b128/runnr1/rn18-lr-[{layer}]-{method}-{compr}-dTrue-iNone_bn_128_sgd_l1e-05_g0.0_sTrue/fact_model_final.pth"
+            path=f"/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/decomposed/fact-{method}-r{compr}-lay[{layer}]-b128/runnr1/rn18-lr-[{layer}]-{method}-{compr}-dTrue-iNone_bn_128_sgd_l1e-05_g0.0_sFalse/fact_model_final.pth"
             model=torch.load(path)
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
             model.to(device)
@@ -74,7 +77,7 @@ for method in methods:
     
                     logger.info(f'start-inf-{method}-r{compr}-lay[{layer}]-ind{i}' )
                     t = tqdm(testloader, total=int(len(testloader)))
-                    for _ , data in enumerate(testloader):
+                    for i , data in enumerate(t):
                         images, labels = data
                         images = images.to(device)  # Move input data to the same device as the model
                         labels = labels.to(device)  # Move labels to the same device as the model
@@ -84,11 +87,11 @@ for method in methods:
                         _, predicted = torch.max(outputs.data, 1)
                         total += labels.size(0)
                         correct += (predicted == labels).sum().item()
-                    logger.info(f'end-inf-{method}-r{compr}-lay[{layer}]' )
+                    logger.info(f'end-inf-{method}-r{compr}-lay[{layer}]-ind{i}' )
 
 
 #baseline
-path="/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/baselines/baseline-rn18-cifar10/runnr1/rn18_18_dNone_128_adam_l0.001_g0.1_w0.0_sTrue/cnn_best.pth"   
+path="/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/baselines/baseline-rn18-cifar10-b128/runnr1/rn18_18_dNone_128_adam_l0.001_g0.1_w0.0_sFalse/cnn_final.pth"   
 model=torch.load(path)
 model.eval()
 
