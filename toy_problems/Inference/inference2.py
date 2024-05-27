@@ -44,11 +44,12 @@ logging.basicConfig(level = logging.INFO)
 
 logger=logging.getLogger('Inferencefin')
 #create a fh
-fh=logging.FileHandler('inferencefin.log')
-fh.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-fh.setFormatter(formatter)
-logger.addHandler(fh)
+if not any(isinstance(handler, logging.FileHandler) for handler in logger.handlers):
+    fh = logging.FileHandler('inferencefin.log')
+    fh.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
 
 
     
