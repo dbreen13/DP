@@ -78,10 +78,10 @@ for method in methods:
                     
     
                     logger.info(f'start-inf-{method}-r{compr}-lay[{layer}]-ind{i}' )
-                    for s in range(12):
+                    for s in range(40):
                         t = tqdm(testloader, total=int(len(testloader)))
                         
-                        for i , data in enumerate(t):
+                        for s , data in enumerate(t):
                             images, labels = data
                             images = images.to(device)  # Move input data to the same device as the model
                             labels = labels.to(device)  # Move labels to the same device as the model
