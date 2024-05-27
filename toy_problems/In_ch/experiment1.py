@@ -25,13 +25,17 @@ logging.basicConfig(level = logging.INFO)
 
 device = torch.device('cpu')
     
-logger=logging.getLogger('Layertest_exp1')
-#create a fh
-fh=logging.FileHandler('laytesten_exp1.log')
-fh.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-fh.setFormatter(formatter)
-logger.addHandler(fh)
+
+logger = logging.getLogger('Layer_fin')
+logger.setLevel(logging.INFO)
+
+# Check if the logger already has a FileHandler
+if not any(isinstance(handler, logging.FileHandler) for handler in logger.handlers):
+    fh = logging.FileHandler('laytesten_exp_fin.log')
+    fh.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
 
     
 #%%CNN, consisting of one layer
@@ -147,10 +151,10 @@ img_h, img_w=[4,4]
 kernel=3
 padding=1
 stride=1
-out_chan=128
+out_chan=512
 batch=128
 num_classes=10
-n_epochs=50000
+n_epochs=30000
 lr=1e-5
 
 cnn_dict={"out_channels": out_chan,
@@ -169,26 +173,89 @@ methods=['cp','tucker','tt', 'nd']
 decompose=True
 
 #create loop with all values to be determined
-
-for in_ch in [16,32,64,128]:
+#cp decomposition
+for in_ch in [64,128,256,512]:
     cnn_dict.update({"in_channels": in_ch})
     with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
-    for method in methods:
-        if method=='nd':
+    for method in ['cp']:
+        for c in compression:
+            fact_dict={"decompose":decompose,
+                        "factorization": method,
+                        "rank" : c}
             for ind in [1,2]:
-                fact_dict={"decompose":False, "factorization":'c', "rank":0}
                 fact_dict.update({'index':ind})
                 model=run_model(x,cnn_dict,fact_dict)
-        else:
-            for c in compression:
-                fact_dict={"decompose":decompose,
-                            "factorization": method,
-                            "rank" : c}
-                for ind in [1,2]:
-                    fact_dict.update({'index':ind})
-                    model=run_model(x,cnn_dict,fact_dict)
+
+# #tucker
+# for in_ch in [16,32,64,128]:
+#     cnn_dict.update({"in_channels": in_ch})
+#     with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+#         x = pickle.load(f)
+
+#     x=x.float()
+#     for method in ['tucker']:
+#         for c in compression:
+#             fact_dict={"decompose":decompose,
+#                         "factorization": method,
+#                         "rank" : c}
+#             for ind in [1,2]:
+#                 fact_dict.update({'index':ind})
+#                 model=run_model(x,cnn_dict,fact_dict)
+# #tt
+# for in_ch in [16,32,64,128]:
+#     cnn_dict.update({"in_channels": in_ch})
+#     with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+#         x = pickle.load(f)
+
+#     x=x.float()
+#     for method in ['tt']:
+#         for c in compression:
+#             fact_dict={"decompose":decompose,
+#                         "factorization": method,
+#                         "rank" : c}
+#             for ind in [1,2]:
+#                 fact_dict.update({'index':ind})
+#                 model=run_model(x,cnn_dict,fact_dict)
+                
+                    
+                    
+##not decomposed
+# for in_ch in [16,32,64,128]:
+#     cnn_dict.update({"in_channels": in_ch})
+#     with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+#         x = pickle.load(f)
+
+#     x=x.float()
+#     for method in ['nd']:
+#         for ind in [1,2]:
+#             fact_dict={"decompose":False, "factorization":'c', "rank":0}
+#             fact_dict.update({'index':ind})
+#             model=run_model(x,cnn_dict,fact_dict)
+
+                    
+                    
+# for in_ch in [16,32,64,128]:
+#     cnn_dict.update({"in_channels": in_ch})
+#     with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+#         x = pickle.load(f)
+
+#     x=x.float()
+#     for method in methods:
+#         if method=='nd':
+#             for ind in [1,2]:
+#                 fact_dict={"decompose":False, "factorization":'c', "rank":0}
+#                 fact_dict.update({'index':ind})
+#                 model=run_model(x,cnn_dict,fact_dict)
+#         else:
+#             for c in compression:
+#                 fact_dict={"decompose":decompose,
+#                             "factorization": method,
+#                             "rank" : c}
+#                 for ind in [1,2]:
+#                     fact_dict.update({'index':ind})
+#                     model=run_model(x,cnn_dict,fact_dict)
             
 
