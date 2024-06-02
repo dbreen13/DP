@@ -54,17 +54,17 @@ if not any(isinstance(handler, logging.FileHandler) for handler in logger.handle
 
     
 
-layers=[63,57,51,47,41,35,28,25,19,6]    
-compression=[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]    
-methods=['cp','tt', 'tucker']
+layers=[35,28,25,19,6]    
+compression=[0.8,0.9]    
+methods=['tucker','tt']
 
 for method in methods:
     for layer in layers:
         for compr in compression:
             path=f"/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/decomposed/fact-{method}-r{compr}-lay[{layer}]-b128/runnr1/rn18-lr-[{layer}]-{method}-{compr}-dTrue-iNone_bn_128_sgd_l1e-05_g0.0_sFalse/fact_model_final.pth"
-            model=torch.load(path)
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-            model.to(device)
+            model=torch.load(path, map_location=device)
+	    model.to(device)
             # since we're not training, we don't need to calculate the gradients for our outputs
             correct = 0
             total = 0
@@ -79,7 +79,7 @@ for method in methods:
                     
     
                     logger.info(f'start-inf-{method}-r{compr}-lay[{layer}]-ind{i}' )
-                    for s in range(40):
+                    for s in range(60):
                         t = tqdm(testloader, total=int(len(testloader)))
                         
                         for s , data in enumerate(t):
