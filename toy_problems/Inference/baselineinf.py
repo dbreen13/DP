@@ -60,7 +60,7 @@ def load_model(path):
 
 
 for runnr in ['runnr1', 'runnr2', 'runnr3', 'runnr4', 'runnr5']:
-    path="/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/baselines/baseline-rn18-cifar10-b128/runnr1/rn18_18_dNone_128_adam_l0.001_g0.1_w0.0_sFalse/cnn_final.pth"
+    path="/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/baselines/baseline-rn18-cifar10-b128/runnr1/rn18_18_dNone_128_adam_l1e-05_g0.0_w0.0_sFalse/cnn_final.pth"
     loading_logger.info(f'Trying to load model from {path}')
     
     model = load_model(path)
@@ -70,29 +70,29 @@ for runnr in ['runnr1', 'runnr2', 'runnr3', 'runnr4', 'runnr5']:
         error_files.append(path)
         continue  # Skip to the next iteration if no model could be loaded
 
-    model.to(device)
-    correct = 0
-    total = 0
-    
-    with torch.no_grad():
-        for i in [1, 2, 3]:
-            timers.sleep(60)
-            now = datetime.now()
-            sec_wait = 60 - now.second
-            timers.sleep(sec_wait)
-    
-            inference_logger.info(f'start-inf-base-cif-ind{i}' )
-            for s in range(60):
-                t = tqdm(testloader, total=int(len(testloader)))
-                for s, data in enumerate(t):
-                    images, labels = data
-                    images = images.to(device)  # Move input data to the same device as the model
-                    labels = labels.to(device)  # Move labels to the same device as the model
-                    outputs = model(images)  # calculate outputs by running images through the network
-                    _, predicted = torch.max(outputs.data, 1)  # the class with the highest energy is what we choose as prediction
-                    total += labels.size(0)
-                    correct += (predicted == labels).sum().item()
-            inference_logger.info(f'end-inf-base-cif-ind{i}')
+model.to(device)
+correct = 0
+total = 0
+
+with torch.no_grad():
+    for i in [1, 2, 3]:
+        timers.sleep(60)
+        now = datetime.now()
+        sec_wait = 60 - now.second
+        timers.sleep(sec_wait)
+
+        inference_logger.info(f'start-inf-base-cif-ind{i}' )
+        for s in range(60):
+            t = tqdm(testloader, total=int(len(testloader)))
+            for s, data in enumerate(t):
+                images, labels = data
+                images = images.to(device)  # Move input data to the same device as the model
+                labels = labels.to(device)  # Move labels to the same device as the model
+                outputs = model(images)  # calculate outputs by running images through the network
+                _, predicted = torch.max(outputs.data, 1)  # the class with the highest energy is what we choose as prediction
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+        inference_logger.info(f'end-inf-base-cif-ind{i}')
 
 # Clear memory after each iteration
 del model
