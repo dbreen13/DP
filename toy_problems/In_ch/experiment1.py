@@ -88,7 +88,7 @@ def run_model(x,cnn_dict, fact_dict):
 
     
     #params fact
-    decompose_weights=False
+    decompose_weights=True
     decompose=fact_dict['decompose']
     factorization=fact_dict['factorization']
     rank=fact_dict['rank']
@@ -150,7 +150,7 @@ def run_model(x,cnn_dict, fact_dict):
 img_h, img_w=[4,4]
 kernel=3
 padding=1
-stride=1
+stride=2
 out_chan=512
 batch=128
 num_classes=10
@@ -174,20 +174,26 @@ decompose=True
 
 #create loop with all values to be determined
 #cp decomposition
-for in_ch in [64,128,256,512]:
+for in_ch in [192,256,320,384]:
     cnn_dict.update({"in_channels": in_ch})
     with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
-    for method in ['cp']:
-        for c in compression:
-            fact_dict={"decompose":decompose,
-                        "factorization": method,
-                        "rank" : c}
+    for method in ['tt']:
+        if method=='nd':
             for ind in [1,2]:
+                fact_dict={"decompose":False, "factorization":'c', "rank":0}
                 fact_dict.update({'index':ind})
                 model=run_model(x,cnn_dict,fact_dict)
+        else:
+            for c in compression:
+                fact_dict={"decompose":decompose,
+                            "factorization": method,
+                            "rank" : c}
+                for ind in [1,2]:
+                    fact_dict.update({'index':ind})
+                    model=run_model(x,cnn_dict,fact_dict)
 
 # #tucker
 # for in_ch in [16,32,64,128]:
