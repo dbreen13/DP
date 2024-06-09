@@ -23,7 +23,7 @@ from datetime import datetime
 
 logging.basicConfig(level = logging.INFO)
 
-device = torch.device('cpu')
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
 
 logger = logging.getLogger('Layer_fin')
@@ -99,7 +99,7 @@ def run_model(x,cnn_dict, fact_dict):
     ind=fact_dict['index']
     
     model=SimpleNet(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=stride, padding=padding, num_classes=num_classes)
-    
+    model.to(device)
     if decompose==True:
         factorize_model(model, rank=rank,factorization=factorization, decomposition_kwargs=decomposition_kwargs, fixed_rank_modes=fixed_rank_modes, decompose_weights=decompose_weights)
         model.to(device)
@@ -117,7 +117,6 @@ def run_model(x,cnn_dict, fact_dict):
     else:
         logger.info(f"bas-start-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
     for _ in tqdm(range(m), desc="Forward Iterations"):
-
         output = model(Variable(x))
 
         batch_size, num_channels, height, width = output.size()
@@ -128,7 +127,7 @@ def run_model(x,cnn_dict, fact_dict):
         # Reshape labels to have the same spatial dimensions as the output tensor
         labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
         optimizer.zero_grad()
-        
+        labels=labels.cuda()
         # Compute the loss directly on reshaped output
         loss = criterion(output, Variable(labels))
         
@@ -154,7 +153,7 @@ stride=2
 out_chan=512
 batch=128
 num_classes=10
-n_epochs=30000
+n_epochs=50000
 lr=1e-5
 
 cnn_dict={"out_channels": out_chan,
@@ -169,18 +168,20 @@ cnn_dict={"out_channels": out_chan,
           "padding": padding}
 
 compression=[0.1,0.25,0.5,0.75,0.9]
-methods=['cp','tucker','tt', 'nd']
+methods=['tucker','tt', 'nd','cp']
 decompose=True
 
 #create loop with all values to be determined
 #cp decomposition
 for in_ch in [192,256,320,384]:
     cnn_dict.update({"in_channels": in_ch})
-    with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
-    for method in ['tt']:
+    x=x.cuda()
+    
+    for method in methods:
         if method=='nd':
             for ind in [1,2]:
                 fact_dict={"decompose":False, "factorization":'c', "rank":0}
