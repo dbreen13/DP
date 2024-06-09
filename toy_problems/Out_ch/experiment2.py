@@ -23,16 +23,19 @@ from datetime import datetime
 
 logging.basicConfig(level = logging.INFO)
 
-device = torch.device('cuda')
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-logger=logging.getLogger('Layertest_exp2')
-#create a fh
-fh=logging.FileHandler('laytesten_exp2.log')
-fh.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-fh.setFormatter(formatter)
-logger.addHandler(fh)
+
+logger = logging.getLogger('Layer_fin')
+logger.setLevel(logging.INFO)
+
+# Check if the logger already has a FileHandler
+if not any(isinstance(handler, logging.FileHandler) for handler in logger.handlers):
+    fh = logging.FileHandler('laytesten_exp_fin.log')
+    fh.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
 
     
 #%%CNN, consisting of one layer
@@ -85,7 +88,7 @@ def run_model(x,cnn_dict, fact_dict):
 
     
     #params fact
-    decompose_weights=False
+    decompose_weights=True
     decompose=fact_dict['decompose']
     factorization=fact_dict['factorization']
     rank=fact_dict['rank']
@@ -96,7 +99,7 @@ def run_model(x,cnn_dict, fact_dict):
     ind=fact_dict['index']
     
     model=SimpleNet(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=stride, padding=padding, num_classes=num_classes)
-    
+    model.to(device)
     if decompose==True:
         factorize_model(model, rank=rank,factorization=factorization, decomposition_kwargs=decomposition_kwargs, fixed_rank_modes=fixed_rank_modes, decompose_weights=decompose_weights)
         model.to(device)
@@ -110,12 +113,10 @@ def run_model(x,cnn_dict, fact_dict):
     timers.sleep(sec_wait)
     start_training = perf_counter()
     if decompose==True:
-        logger.info(f"dec-start-outch{out_channels}-inch{in_channels}-fact{factorization}-wh{img_w}-ind{ind}s")
+        logger.info(f"dec-start-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
     else:
-        logger.info(f"bas-start-outch{out_channels}-inch{in_channels}-fact{factorization}-wh{img_w}-ind{ind}s")
-
+        logger.info(f"bas-start-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
     for _ in tqdm(range(m), desc="Forward Iterations"):
-
         output = model(Variable(x))
 
         batch_size, num_channels, height, width = output.size()
@@ -126,7 +127,7 @@ def run_model(x,cnn_dict, fact_dict):
         # Reshape labels to have the same spatial dimensions as the output tensor
         labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
         optimizer.zero_grad()
-        
+        labels=labels.cuda()
         # Compute the loss directly on reshaped output
         loss = criterion(output, Variable(labels))
         
@@ -134,9 +135,9 @@ def run_model(x,cnn_dict, fact_dict):
         loss.backward()
         optimizer.step() 
     if decompose==True:
-        logger.info(f"dec-end-outch{out_channels}-inch{in_channels}-fact{factorization}-wh{img_w}-ind{ind}s")
+        logger.info(f"dec-end-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
     else:
-        logger.info(f"bas-end-outch{out_channels}-inch{in_channels}-fact{factorization}-wh{img_w}-ind{ind}s")
+        logger.info(f"bas-end-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
     end_training = perf_counter()
     training_time = start_training - end_training
     print(training_time)
@@ -148,11 +149,11 @@ def run_model(x,cnn_dict, fact_dict):
 img_h, img_w=[4,4]
 kernel=3
 padding=1
-stride=1
-in_chan=64
+stride=2
+in_chan=192
 batch=128
 num_classes=10
-n_epochs=70000
+n_epochs=50000
 lr=1e-5
 
 cnn_dict={"in_channels": in_chan,
@@ -167,33 +168,101 @@ cnn_dict={"in_channels": in_chan,
           "padding": padding}
 
 compression=[0.1,0.25,0.5,0.75,0.9]
-methods=['cp','tucker','tt','nd']
+methods=['tucker','tt', 'nd','cp']
 decompose=True
 
 #create loop with all values to be determined
+#cp decomposition
+for out_ch in [192,256,320,384]:
+    cnn_dict.update({"out_channels": out_ch})
+    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+        x = pickle.load(f)
 
-for out_ch in [64,128,256,512]:
-        cnn_dict.update({"out_channels": out_ch})
-        with open(f'/home/dbreen/Documents/tddl/DP/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
-            x = pickle.load(f)
-        
-        x=x.float()
-        x.to(device)
-        for method in methods:
-            if method=='nd':
+    x=x.float()
+    x=x.cuda()
+    
+    for method in methods:
+        if method=='nd':
+            for ind in [1,2]:
                 fact_dict={"decompose":False, "factorization":'c', "rank":0}
-                for ind in range(3):
+                fact_dict.update({'index':ind})
+                model=run_model(x,cnn_dict,fact_dict)
+        else:
+            for c in compression:
+                fact_dict={"decompose":decompose,
+                            "factorization": method,
+                            "rank" : c}
+                for ind in [1,2]:
                     fact_dict.update({'index':ind})
                     model=run_model(x,cnn_dict,fact_dict)
-            else:
-                for c in compression:
-                    fact_dict={"decompose":decompose,
-                                "factorization": method,
-                                "rank" : c}
-                    for ind in range(3):
-                        fact_dict.update({'index':ind})
-                        model=run_model(x,cnn_dict,fact_dict)
+
+# #tucker
+# for in_ch in [16,32,64,128]:
+#     cnn_dict.update({"in_channels": in_ch})
+#     with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+#         x = pickle.load(f)
+
+#     x=x.float()
+#     for method in ['tucker']:
+#         for c in compression:
+#             fact_dict={"decompose":decompose,
+#                         "factorization": method,
+#                         "rank" : c}
+#             for ind in [1,2]:
+#                 fact_dict.update({'index':ind})
+#                 model=run_model(x,cnn_dict,fact_dict)
+# #tt
+# for in_ch in [16,32,64,128]:
+#     cnn_dict.update({"in_channels": in_ch})
+#     with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+#         x = pickle.load(f)
+
+#     x=x.float()
+#     for method in ['tt']:
+#         for c in compression:
+#             fact_dict={"decompose":decompose,
+#                         "factorization": method,
+#                         "rank" : c}
+#             for ind in [1,2]:
+#                 fact_dict.update({'index':ind})
+#                 model=run_model(x,cnn_dict,fact_dict)
                 
+                    
+                    
+##not decomposed
+# for in_ch in [16,32,64,128]:
+#     cnn_dict.update({"in_channels": in_ch})
+#     with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+#         x = pickle.load(f)
 
+#     x=x.float()
+#     for method in ['nd']:
+#         for ind in [1,2]:
+#             fact_dict={"decompose":False, "factorization":'c', "rank":0}
+#             fact_dict.update({'index':ind})
+#             model=run_model(x,cnn_dict,fact_dict)
 
+                    
+                    
+# for in_ch in [16,32,64,128]:
+#     cnn_dict.update({"in_channels": in_ch})
+#     with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+#         x = pickle.load(f)
+
+#     x=x.float()
+#     for method in methods:
+#         if method=='nd':
+#             for ind in [1,2]:
+#                 fact_dict={"decompose":False, "factorization":'c', "rank":0}
+#                 fact_dict.update({'index':ind})
+#                 model=run_model(x,cnn_dict,fact_dict)
+#         else:
+#             for c in compression:
+#                 fact_dict={"decompose":decompose,
+#                             "factorization": method,
+#                             "rank" : c}
+#                 for ind in [1,2]:
+#                     fact_dict.update({'index':ind})
+#                     model=run_model(x,cnn_dict,fact_dict)
+            
 
