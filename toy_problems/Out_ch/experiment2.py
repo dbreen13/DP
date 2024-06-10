@@ -31,7 +31,7 @@ logger.setLevel(logging.INFO)
 
 # Check if the logger already has a FileHandler
 if not any(isinstance(handler, logging.FileHandler) for handler in logger.handlers):
-    fh = logging.FileHandler('laytesten_exp_fin.log')
+    fh = logging.FileHandler('Out_ch.log')
     fh.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     fh.setFormatter(formatter)
@@ -175,7 +175,7 @@ decompose=True
 #cp decomposition
 for out_ch in [192,256,320,384]:
     cnn_dict.update({"out_channels": out_ch})
-    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
