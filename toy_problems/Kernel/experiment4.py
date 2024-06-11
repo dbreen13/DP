@@ -153,7 +153,7 @@ in_chan=384
 out_ch=512
 batch=128
 num_classes=10
-n_epochs=90000
+n_epochs=70000
 lr=1e-5
 
 cnn_dict={"in_channels": in_chan,
