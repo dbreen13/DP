@@ -61,7 +61,7 @@ def load_model(path):
         loading_logger.error(f'Error loading model from {path}: {e}')
         return None
 
-path="/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/baselines/baseline-rn18-cifar10-b128/runnr1/rn18_18_dNone_128_adam_l0.001_g0.1_w0.0_sFalse/cnn_final.pth"   
+path="/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/baselines/baseline-rn18-cifar10-b128/runnr2/rn18_18_dNone_128_adam_l1e-05_g0.0_w0.0_sFalse/cnn_final.pth"   
 model=torch.load(path)
 model.eval()
 for i in [1, 2, 3]:
