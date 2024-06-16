@@ -18,8 +18,8 @@ transform = transforms.Compose([
 
 testset = datasets.CIFAR10(root='/home/dbreen/Documents/tddl/bigdata/cifar10', train=True, download=False, transform=transform)
 
-batch_size = 128
-testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=8)
+batch_size = 128*5
+testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=4)
 classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 # Setup the inference logger
@@ -27,7 +27,7 @@ logging.basicConfig(level=logging.INFO)
 inference_logger = logging.getLogger('Inferencefin')
 
 if not any(isinstance(handler, logging.FileHandler) for handler in inference_logger.handlers):
-    fh = logging.FileHandler('inferencefin.log')
+    fh = logging.FileHandler('inf_final.log')
     fh.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     fh.setFormatter(formatter)
@@ -76,8 +76,8 @@ for method in methods:
                 continue  # Skip to the next iteration if no model could be loaded
             
             model.to(device)
-            correct = 0
-            total = 0
+            #correct = 0
+            #total = 0
 
             with torch.no_grad():
                 for i in [1, 2, 3]:
@@ -87,16 +87,17 @@ for method in methods:
                     timers.sleep(sec_wait)
     
                     inference_logger.info(f'start-inf-{method}-r{compr}-lay[{layer}]-ind{i}')
-                    for s in range(180):
+                    for s in range(60):
                         t = tqdm(testloader, total=int(len(testloader)))
-                        for s, data in enumerate(t):
+                        for j, data in enumerate(t):
                             images, labels = data
                             images = images.to(device)  # Move input data to the same device as the model
-                            labels = labels.to(device)  # Move labels to the same device as the model
+                            #labels = labels.to(device)  # Move labels to the same device as the model
+                            
                             outputs = model(images)  # calculate outputs by running images through the network
-                            _, predicted = torch.max(outputs.data, 1)  # the class with the highest energy is what we choose as prediction
-                            total += labels.size(0)
-                            correct += (predicted == labels).sum().item()
+                            #_, predicted = torch.max(outputs.data, 1)  # the class with the highest energy is what we choose as prediction
+                            #total += labels.size(0)
+                            #correct += (predicted == labels).sum().item()
                     inference_logger.info(f'end-inf-{method}-r{compr}-lay[{layer}]-ind{i}')
             
             # Clear memory after each iteration
