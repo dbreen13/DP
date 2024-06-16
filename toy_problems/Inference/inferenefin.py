@@ -69,6 +69,7 @@ for method in methods:
                 loading_logger.info(f'Trying to load model from {path}')
                 
                 model = load_model(path)
+                print(model)
                 if model is not None:
                     break
             else:

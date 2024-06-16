@@ -152,7 +152,7 @@ in_chan=448
 out_ch=512
 batch=128
 num_classes=10
-n_epochs=50000
+n_epochs=70000
 lr=1e-5
 kernel=3
 
@@ -163,6 +163,7 @@ cnn_dict={"in_channels": in_chan,
           "n_epochs": n_epochs,
           "lr":lr,
           "stride": stride,
+          "kernel_size":kernel,
           "padding": padding}
 
 compression=[0.1,0.25,0.5,0.75,0.9]
