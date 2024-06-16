@@ -43,9 +43,9 @@ if not any(isinstance(handler, logging.FileHandler) for handler in loading_logge
     fh_loading.setFormatter(formatter_loading)
     loading_logger.addHandler(fh_loading)
 
-layers=[63,60,57,54,51,47,41,38,35,28,25,22,19,15,6]
+layers=[63,57,51,47,41,35,28,25,19,6]
 compression = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
-methods = ['tt']
+methods = ['cp','tucker','tt']
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -69,7 +69,6 @@ for method in methods:
                 loading_logger.info(f'Trying to load model from {path}')
                 
                 model = load_model(path)
-                print(model)
                 if model is not None:
                     break
             else:
@@ -88,7 +87,7 @@ for method in methods:
                     timers.sleep(sec_wait)
     
                     inference_logger.info(f'start-inf-{method}-r{compr}-lay[{layer}]-ind{i}')
-                    for s in range(60):
+                    for s in range(180):
                         t = tqdm(testloader, total=int(len(testloader)))
                         for s, data in enumerate(t):
                             images, labels = data
