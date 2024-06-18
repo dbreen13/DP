@@ -72,12 +72,13 @@ for i in [1, 2, 3]:
 
     inference_logger.info(f'start-inf-base-cif-ind{i}')
     for s in range(180):
-        t = tqdm(testloader, total=int(len(testloader)))
-        for s, data in enumerate(t):
-            images, labels = data
-            images = images.to(device)  # Move input data to the same device as the model
-            #labels = labels.to(device)  # Move labels to the same device as the model
-            outputs = model(images)  # calculate outputs by running images through the network
+        with torch.no_grad():
+            t = tqdm(testloader, total=int(len(testloader)))
+            for s, data in enumerate(t):
+                images, labels = data
+                images = images.to(device)  # Move input data to the same device as the model
+                #labels = labels.to(device)  # Move labels to the same device as the model
+                outputs = model(images)  # calculate outputs by running images through the network
     inference_logger.info(f'end-inf-base-cif-ind{i}')
 
 
