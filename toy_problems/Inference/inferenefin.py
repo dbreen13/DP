@@ -5,6 +5,7 @@ import torch
 import torchvision.transforms as transforms
 import time as timers
 
+
 from datetime import datetime
 from tqdm import tqdm
 
@@ -64,22 +65,23 @@ def load_model(path):
 path="/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/baselines/baseline-rn18-cifar10-b128/runnr2/rn18_18_dNone_128_adam_l1e-05_g0.0_w0.0_sFalse/cnn_final.pth"   
 model=torch.load(path)
 model.eval()
-for i in [1, 2, 3]:
-    timers.sleep(60)
-    now = datetime.now()
-    sec_wait = 60 - now.second
-    timers.sleep(sec_wait)
-
-    inference_logger.info(f'start-inf-base-cif-ind{i}')
-    for s in range(180):
-        with torch.no_grad():
-            t = tqdm(testloader, total=int(len(testloader)))
-            for s, data in enumerate(t):
-                images, labels = data
-                images = images.to(device)  # Move input data to the same device as the model
-                #labels = labels.to(device)  # Move labels to the same device as the model
-                outputs = model(images)  # calculate outputs by running images through the network
-    inference_logger.info(f'end-inf-base-cif-ind{i}')
+with torch.no_grad():
+    for i in [1, 2, 3]:
+        timers.sleep(60)
+        now = datetime.now()
+        sec_wait = 60 - now.second
+        timers.sleep(sec_wait)
+    
+        inference_logger.info(f'start-inf-base-cif-ind{i}')
+        for s in range(180):
+            with torch.no_grad():
+                t = tqdm(testloader, total=int(len(testloader)))
+                for s, data in enumerate(t):
+                    images, labels = data
+                    images = images.to(device)  # Move input data to the same device as the model
+                    #labels = labels.to(device)  # Move labels to the same device as the model
+                    outputs = model(images)  # calculate outputs by running images through the network
+        inference_logger.info(f'end-inf-base-cif-ind{i}')
 
 
 for method in methods:
