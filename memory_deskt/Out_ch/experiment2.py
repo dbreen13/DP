@@ -120,11 +120,11 @@ def run_model(x,cnn_dict, fact_dict):
     # else:
     #     logger.info(f"bas-start-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
     with torch.no_grad():
-        with profile(activities=[ProfilerActivity.CUDA], record_shapes=False, profile_memory=True) as prof:
-            for _ in tqdm(range(m), desc="Forward Iterations"):
-                
-                output = model(Variable(x))
+        torch.cuda.reset_peak_memory_stats()
+        for _ in tqdm(range(m), desc="Forward Iterations"):
             
+            output = model(Variable(x))
+        
     
             # batch_size, num_channels, height, width = output.size()
     
@@ -148,8 +148,8 @@ def run_model(x,cnn_dict, fact_dict):
     end_training = perf_counter()
     training_time = start_training - end_training
     print(training_time)
-    key_averages = prof.key_averages()
-    peak_memory = sum([item.cuda_memory_usage for item in key_averages])
+    #key_averages = prof.key_averages()
+    peak_memory = torch.cuda.max_memory_allocated()
     #total_inclusive_memory = sum([item.cpu_memory_usage for item in key_averages])
 
     return(model,peak_memory / (1024 * 1024))
