@@ -23,9 +23,9 @@ import time as timers
 from datetime import datetime
 import tracemalloc
 import os
-from memory_profiler import profile
+#from memory_profiler import profile
 import pandas as pd
-from torch.profiler import profile, record_function, ProfilerActivity
+#from torch.profiler import profile, record_function, ProfilerActivity
 
 logging.basicConfig(level = logging.INFO)
 
@@ -192,7 +192,7 @@ for img_h in [2,4,6,8]:
     img_w=img_h
     cnn_dict.update({"img_h": img_h})
     cnn_dict.update({"img_w":img_h})
-    with open(f'C:/Users/demib/Documents/Thesis/Memory/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP2/DP/memory_deskt/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
@@ -202,6 +202,7 @@ for img_h in [2,4,6,8]:
             fact_dict={"decompose":False, "factorization":'c', "rank":0}
             for ind in [1]:
                 fact_dict.update({'index':ind})
+                print(f'bas-outch{out_chan}-inch{in_chan}-wh{img_w}')
                 model, mem=run_model(x,cnn_dict,fact_dict)
                 key=f'bas-outch{out_chan}-inch{in_chan}-wh{img_w}'
                 mem_dict[key]={'Mem': np.round(mem*n,decimals=3)}
@@ -213,7 +214,9 @@ for img_h in [2,4,6,8]:
                             "rank" : c}
                 for ind in [1]:
                     fact_dict.update({'index':ind})
+                    print(f'outch{out_chan}-inch{in_chan}-fact{method}-r{c}-wh{img_w}')
                     model, mem=run_model(x,cnn_dict,fact_dict)
+                    print(mem)
                     key=f'outch{out_chan}-inch{in_chan}-fact{method}-r{c}-wh{img_w}'
                     mem_dict[key]={'Mem': np.round(mem*n,decimals=3)}
 

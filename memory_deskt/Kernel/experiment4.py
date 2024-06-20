@@ -22,11 +22,11 @@ import time as timers
 from datetime import datetime
 import os
 import pandas as pd
-from torch.profiler import profile, record_function, ProfilerActivity
+#from torch.profiler import profile, record_function, ProfilerActivity
 
 logging.basicConfig(level = logging.INFO)
 
-device = torch.device('cpu')
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
 
 logger = logging.getLogger('KErnel')
@@ -164,7 +164,7 @@ out_chan=512
 batch=128
 num_classes=10
 n_epochs=1
-n=90000
+n=1
 lr=1e-5
 
 cnn_dict={"in_channels": in_chan,
@@ -179,7 +179,7 @@ cnn_dict={"in_channels": in_chan,
           "padding": padding}
 
 compression=[0.1,0.25,0.5,0.75,0.9]
-methods=['cp','tucker','tt','nd']
+methods=['tt','tucker','cp']
 decompose=True
 
 #create loop with all values to be determined
@@ -188,7 +188,7 @@ decompose=True
 mem_dict={}                 
 for kernel in [1,3,5]:
     cnn_dict.update({"kernel_size":kernel})
-    with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP2/DP/memory_deskt/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
     x=x.float()
     x=x.cuda()
@@ -205,9 +205,12 @@ for kernel in [1,3,5]:
                 fact_dict={"decompose":decompose,
                             "factorization": method,
                             "rank" : c}
-                for ind in range(3):
+                for ind in [1]:
                     fact_dict.update({'index':ind})
-                    model=run_model(x,cnn_dict,fact_dict)
+                    print(f'outch{out_chan}-inch{in_chan}-fact{method}-r{c}-wh{img_w}-kern{kernel}')
+                    model, mem=run_model(x,cnn_dict,fact_dict)
+                    key=f'outch{out_chan}-inch{in_chan}-fact{method}-r{c}-wh{img_w}-kern{kernel}'
+                    mem_dict[key]={'Mem': np.round(mem*n,decimals=3)}
             
 df = pd.DataFrame.from_dict(mem_dict, orient='index', columns=['Mem'])
 

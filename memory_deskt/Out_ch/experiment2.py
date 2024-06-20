@@ -22,7 +22,7 @@ import time as timers
 from datetime import datetime
 import os
 import pandas as pd
-from torch.profiler import profile, record_function, ProfilerActivity
+#from torch.profiler import profile, record_function, ProfilerActivity
 
 logging.basicConfig(level = logging.INFO)
 
@@ -190,7 +190,7 @@ mem_dict={}
 #cp decomposition
 for out_ch in [384,320,256,192]:
     cnn_dict.update({"out_channels": out_ch})
-    with open(f'C:/Users/demib/Documents/Thesis/Memory/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP2/DP/memory_deskt/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()

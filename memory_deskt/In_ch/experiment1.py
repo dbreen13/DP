@@ -23,7 +23,7 @@ from time import time, perf_counter
 import time as timers
 from datetime import datetime
 import os
-from torch.profiler import profile, record_function, ProfilerActivity
+#from torch.profiler import profile, record_function, ProfilerActivity
 
 
 logging.basicConfig(level = logging.INFO)
@@ -121,7 +121,7 @@ def run_model(x,cnn_dict, fact_dict):
     # else:
     #     logger.info(f"bas-start-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
     with torch.no_grad():
-        torch.cuda.reset.peak_memory_stats()
+        torch.cuda.reset_peak_memory_stats()
         for _ in tqdm(range(m), desc="Forward Iterations"):
             output = model(Variable(x))
             
@@ -187,7 +187,7 @@ decompose=True
 mem_dict={}
 for in_ch in [192,256,320,384]:
     cnn_dict.update({"in_channels": in_ch})
-    with open(f'C:/Users/demib/Documents/Thesis/Memory/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP2/DP/memory_deskt/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
