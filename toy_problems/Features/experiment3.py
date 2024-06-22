@@ -106,7 +106,7 @@ def run_model(x,cnn_dict, fact_dict):
     
     optimizer=optim.SGD(model.parameters(), lr=lr, weight_decay = 0.005, momentum = 0.9)
 
-    model.train()
+    model.eval()
     timers.sleep(60)
     now=datetime.now()
     sec_wait=60-now.second
