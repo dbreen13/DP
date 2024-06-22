@@ -106,7 +106,7 @@ def run_model(x,cnn_dict, fact_dict):
     
     optimizer=optim.SGD(model.parameters(), lr=lr, weight_decay = 0.005, momentum = 0.9)
 
-    model.train()
+    model.eval()
     timers.sleep(60)
     now=datetime.now()
     sec_wait=60-now.second
@@ -184,7 +184,7 @@ for kernel in [1,3,5]:
     
     for method in methods:
         if method=='nd':
-            for ind in [1,2]:
+            for ind in [1,2,3]:
                 fact_dict={"decompose":False, "factorization":'c', "rank":0}
                 fact_dict.update({'index':ind})
                 model=run_model(x,cnn_dict,fact_dict)
@@ -193,7 +193,7 @@ for kernel in [1,3,5]:
                 fact_dict={"decompose":decompose,
                             "factorization": method,
                             "rank" : c}
-                for ind in [1,2]:
+                for ind in [1,2,3]:
                     fact_dict.update({'index':ind})
                     model=run_model(x,cnn_dict,fact_dict)
 
