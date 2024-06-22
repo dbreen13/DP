@@ -31,7 +31,7 @@ logger.setLevel(logging.INFO)
 
 # Check if the logger already has a FileHandler
 if not any(isinstance(handler, logging.FileHandler) for handler in logger.handlers):
-    fh = logging.FileHandler('Kernel.log')
+    fh = logging.FileHandler('Kernel_nograd.log')
     fh.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     fh.setFormatter(formatter)
@@ -116,28 +116,29 @@ def run_model(x,cnn_dict, fact_dict):
         logger.info(f"dec-start-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
     else:
         logger.info(f"bas-start-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
-    for _ in tqdm(range(m), desc="Forward Iterations"):
-        output = model(Variable(x))
-
-        batch_size, num_channels, height, width = output.size()
-
-        criterion = nn.CrossEntropyLoss()
-        labels = torch.randint(low=0, high=num_classes, size=(batch_size,), dtype=torch.long)
-
-        # Reshape labels to have the same spatial dimensions as the output tensor
-        labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
-        optimizer.zero_grad()
-        labels=labels.cuda()
-        # Compute the loss directly on reshaped output
-        loss = criterion(output, Variable(labels))
-        
-        # Backward pass
-        loss.backward()
-        optimizer.step() 
-    if decompose==True:
-        logger.info(f"dec-end-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
-    else:
-        logger.info(f"bas-end-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
+    with torch.no_grad():
+        for _ in tqdm(range(m), desc="Forward Iterations"):
+            output = model(Variable(x))
+    
+            batch_size, num_channels, height, width = output.size()
+    
+            criterion = nn.CrossEntropyLoss()
+            labels = torch.randint(low=0, high=num_classes, size=(batch_size,), dtype=torch.long)
+    
+            # Reshape labels to have the same spatial dimensions as the output tensor
+            labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
+            optimizer.zero_grad()
+            labels=labels.cuda()
+            # Compute the loss directly on reshaped output
+            loss = criterion(output, Variable(labels))
+            
+            # Backward pass
+            loss.backward()
+            optimizer.step() 
+        if decompose==True:
+            logger.info(f"dec-end-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
+        else:
+            logger.info(f"bas-end-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
     end_training = perf_counter()
     training_time = start_training - end_training
     print(training_time)
