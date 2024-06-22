@@ -31,7 +31,7 @@ logger.setLevel(logging.INFO)
 
 # Check if the logger already has a FileHandler
 if not any(isinstance(handler, logging.FileHandler) for handler in logger.handlers):
-    fh = logging.FileHandler('Out_ch.log')
+    fh = logging.FileHandler('Out_ch_nograd.log')
     fh.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     fh.setFormatter(formatter)
@@ -106,7 +106,7 @@ def run_model(x,cnn_dict, fact_dict):
     
     optimizer=optim.SGD(model.parameters(), lr=lr, weight_decay = 0.005, momentum = 0.9)
 
-    model.train()
+    model.eval()
     timers.sleep(60)
     now=datetime.now()
     sec_wait=60-now.second
@@ -116,28 +116,29 @@ def run_model(x,cnn_dict, fact_dict):
         logger.info(f"dec-start-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
     else:
         logger.info(f"bas-start-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
-    for _ in tqdm(range(m), desc="Forward Iterations"):
-        output = model(Variable(x))
-
-        batch_size, num_channels, height, width = output.size()
-
-        criterion = nn.CrossEntropyLoss()
-        labels = torch.randint(low=0, high=num_classes, size=(batch_size,), dtype=torch.long)
-
-        # Reshape labels to have the same spatial dimensions as the output tensor
-        labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
-        optimizer.zero_grad()
-        labels=labels.cuda()
-        # Compute the loss directly on reshaped output
-        loss = criterion(output, Variable(labels))
-        
-        # Backward pass
-        loss.backward()
-        optimizer.step() 
-    if decompose==True:
-        logger.info(f"dec-end-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
-    else:
-        logger.info(f"bas-end-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
+    with torch.no_grad():
+        for _ in tqdm(range(m), desc="Forward Iterations"):
+            output = model(Variable(x))
+    
+            batch_size, num_channels, height, width = output.size()
+    
+            criterion = nn.CrossEntropyLoss()
+            labels = torch.randint(low=0, high=num_classes, size=(batch_size,), dtype=torch.long)
+    
+            # Reshape labels to have the same spatial dimensions as the output tensor
+            labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
+            optimizer.zero_grad()
+            labels=labels.cuda()
+            # Compute the loss directly on reshaped output
+            loss = criterion(output, Variable(labels))
+            
+            # Backward pass
+            loss.backward()
+            optimizer.step() 
+        if decompose==True:
+            logger.info(f"dec-end-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
+        else:
+            logger.info(f"bas-end-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
     end_training = perf_counter()
     training_time = start_training - end_training
     print(training_time)
@@ -183,7 +184,7 @@ for out_ch in [192,256,320,384]:
     
     for method in methods:
         if method=='nd':
-            for ind in [1,2]:
+            for ind in [1,2,3]:
                 fact_dict={"decompose":False, "factorization":'c', "rank":0}
                 fact_dict.update({'index':ind})
                 model=run_model(x,cnn_dict,fact_dict)
@@ -192,7 +193,7 @@ for out_ch in [192,256,320,384]:
                 fact_dict={"decompose":decompose,
                             "factorization": method,
                             "rank" : c}
-                for ind in [1,2]:
+                for ind in [1,2,3]:
                     fact_dict.update({'index':ind})
                     model=run_model(x,cnn_dict,fact_dict)
 
