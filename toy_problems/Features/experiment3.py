@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jun 23 14:22:04 2024
+
+@author: demib
+"""
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -120,21 +127,21 @@ def run_model(x,cnn_dict, fact_dict):
         for _ in tqdm(range(m), desc="Forward Iterations"):
             output = model(Variable(x))
     
-            #batch_size, num_channels, height, width = output.size()
+            batch_size, num_channels, height, width = output.size()
     
-            #criterion = nn.CrossEntropyLoss()
-            #labels = torch.randint(low=0, high=num_classes, size=(batch_size,), dtype=torch.long)
+            criterion = nn.CrossEntropyLoss()
+            labels = torch.randint(low=0, high=num_classes, size=(batch_size,), dtype=torch.long)
     
             # Reshape labels to have the same spatial dimensions as the output tensor
-            #labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
-            #optimizer.zero_grad()
-            #labels=labels.cuda()
+            labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
+            optimizer.zero_grad()
+            labels=labels.cuda()
             # Compute the loss directly on reshaped output
-            #loss = criterion(output, Variable(labels))
+            loss = criterion(output, Variable(labels))
             
             # Backward pass
-            #loss.backward()
-            #optimizer.step() 
+            loss.backward()
+            optimizer.step() 
         if decompose==True:
             logger.info(f"dec-end-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
         else:
@@ -153,7 +160,7 @@ in_chan=448
 out_ch=512
 batch=128
 num_classes=10
-n_epochs=330000
+n_epochs=70000
 lr=1e-5
 kernel=3
 
@@ -167,19 +174,56 @@ cnn_dict={"in_channels": in_chan,
           "kernel_size":kernel,
           "padding": padding}
 
-compression=[0.1,0.25,0.5,0.75,0.9]
-methods=['tucker','tt', 'nd','cp']
+compression=[0.25]
+methods=['cp']
 decompose=True
 
 #create loop with all values to be determined
 #cp decomposition
-for feature in [2,4,6,8]:
+for feature in [4]:
     img_h=feature
     img_w=img_h
     cnn_dict.update({"img_h": img_h})
     cnn_dict.update({"img_w": img_w})
     
-    with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+        x = pickle.load(f)
+
+    x=x.float()
+    x=x.cuda()
+    
+    for method in methods:
+        if method=='nd':
+            for ind in [3]:
+                fact_dict={"decompose":False, "factorization":'c', "rank":0}
+                fact_dict.update({'index':ind})
+                model=run_model(x,cnn_dict,fact_dict)
+        else:
+            for c in compression:
+                fact_dict={"decompose":decompose,
+                            "factorization": method,
+                            "rank" : c}
+                for ind in [3]:
+                    fact_dict.update({'index':ind})
+                    model=run_model(x,cnn_dict,fact_dict)
+
+
+#already defined params, steady for this type of experiment
+
+
+compression=[0.5,0.75,0.9]
+methods=['cp']
+decompose=True
+
+#create loop with all values to be determined
+#cp decomposition
+for feature in [4]:
+    img_h=feature
+    img_w=img_h
+    cnn_dict.update({"img_h": img_h})
+    cnn_dict.update({"img_w": img_w})
+    
+    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
@@ -199,7 +243,42 @@ for feature in [2,4,6,8]:
                 for ind in [1,2,3]:
                     fact_dict.update({'index':ind})
                     model=run_model(x,cnn_dict,fact_dict)
+                
+                
+#already defined params, steady for this ty]
 
+compression=[0.1,0.25,0.5,0.75,0.9]
+methods=['tucker','tt', 'nd','cp']
+decompose=True
+
+#create loop with all values to be determined
+#cp decomposition
+for feature in [6,8]:
+    img_h=feature
+    img_w=img_h
+    cnn_dict.update({"img_h": img_h})
+    cnn_dict.update({"img_w": img_w})
+    
+    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+        x = pickle.load(f)
+
+    x=x.float()
+    x=x.cuda()
+    
+    for method in methods:
+        if method=='nd':
+            for ind in [1,2,3]:
+                fact_dict={"decompose":False, "factorization":'c', "rank":0}
+                fact_dict.update({'index':ind})
+                model=run_model(x,cnn_dict,fact_dict)
+        else:
+            for c in compression:
+                fact_dict={"decompose":decompose,
+                            "factorization": method,
+                            "rank" : c}
+                for ind in [1,2,3]:
+                    fact_dict.update({'index':ind})
+                    model=run_model(x,cnn_dict,fact_dict)            
 # #tucker
 # for in_ch in [16,32,64,128]:
 #     cnn_dict.update({"in_channels": in_ch})
