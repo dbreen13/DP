@@ -186,13 +186,14 @@ for feature in [4]:
     cnn_dict.update({"img_h": img_h})
     cnn_dict.update({"img_w": img_w})
     
-    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
     x=x.cuda()
     
     for method in methods:
+        print(method)
         if method=='nd':
             for ind in [3]:
                 fact_dict={"decompose":False, "factorization":'c', "rank":0}
@@ -223,7 +224,7 @@ for feature in [4]:
     cnn_dict.update({"img_h": img_h})
     cnn_dict.update({"img_w": img_w})
     
-    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
@@ -259,7 +260,7 @@ for feature in [6,8]:
     cnn_dict.update({"img_h": img_h})
     cnn_dict.update({"img_w": img_w})
     
-    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
