@@ -134,7 +134,7 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle
 classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 
-for method in ['tt','tucker']:
+for method in ['cp','tucker']:
     for layer in layers:
         for compr in compression:
             for runnr in ['runnr1', 'runnr2', 'runnr3', 'runnr4', 'runnr5']:
@@ -160,7 +160,7 @@ for method in ['tt','tucker']:
                     timers.sleep(sec_wait)
     
                     inference_logger.info(f'start-inf-{method}-r{compr}-lay[{layer}]-ind{i}')
-                    for s in range(180):
+                    for s in range(100):
                         t = tqdm(testloader, total=int(len(testloader)))
                         for s, data in enumerate(t):
                             images, labels = data
