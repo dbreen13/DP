@@ -160,7 +160,7 @@ in_chan=448
 out_ch=512
 batch=128
 num_classes=10
-n_epochs=70000
+n_epochs=330000
 lr=1e-5
 kernel=3
 
@@ -174,81 +174,11 @@ cnn_dict={"in_channels": in_chan,
           "kernel_size":kernel,
           "padding": padding}
 
-compression=[0.25]
-methods=['cp']
-decompose=True
-
-#create loop with all values to be determined
-#cp decomposition
-for feature in [4]:
-    img_h=feature
-    img_w=img_h
-    cnn_dict.update({"img_h": img_h})
-    cnn_dict.update({"img_w": img_w})
-    
-    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
-        x = pickle.load(f)
-
-    x=x.float()
-    x=x.cuda()
-    
-    for method in methods:
-        if method=='nd':
-            for ind in [3]:
-                fact_dict={"decompose":False, "factorization":'c', "rank":0}
-                fact_dict.update({'index':ind})
-                model=run_model(x,cnn_dict,fact_dict)
-        else:
-            for c in compression:
-                fact_dict={"decompose":decompose,
-                            "factorization": method,
-                            "rank" : c}
-                for ind in [3]:
-                    fact_dict.update({'index':ind})
-                    model=run_model(x,cnn_dict,fact_dict)
-
-
 #already defined params, steady for this type of experiment
 
 
-compression=[0.5,0.75,0.9]
+compression=[0.75,0.9]
 methods=['cp']
-decompose=True
-
-#create loop with all values to be determined
-#cp decomposition
-for feature in [4]:
-    img_h=feature
-    img_w=img_h
-    cnn_dict.update({"img_h": img_h})
-    cnn_dict.update({"img_w": img_w})
-    
-    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
-        x = pickle.load(f)
-
-    x=x.float()
-    x=x.cuda()
-    
-    for method in methods:
-        if method=='nd':
-            for ind in [1,2,3]:
-                fact_dict={"decompose":False, "factorization":'c', "rank":0}
-                fact_dict.update({'index':ind})
-                model=run_model(x,cnn_dict,fact_dict)
-        else:
-            for c in compression:
-                fact_dict={"decompose":decompose,
-                            "factorization": method,
-                            "rank" : c}
-                for ind in [1,2,3]:
-                    fact_dict.update({'index':ind})
-                    model=run_model(x,cnn_dict,fact_dict)
-                
-                
-#already defined params, steady for this ty]
-
-compression=[0.1,0.25,0.5,0.75,0.9]
-methods=['tucker','tt', 'nd','cp']
 decompose=True
 
 #create loop with all values to be determined
@@ -259,7 +189,7 @@ for feature in [6,8]:
     cnn_dict.update({"img_h": img_h})
     cnn_dict.update({"img_w": img_w})
     
-    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
@@ -276,7 +206,43 @@ for feature in [6,8]:
                 fact_dict={"decompose":decompose,
                             "factorization": method,
                             "rank" : c}
-                for ind in [1,2,3]:
+                for ind in [1,2]:
+                    fact_dict.update({'index':ind})
+                    model=run_model(x,cnn_dict,fact_dict)
+                
+                
+#already defined params, steady for this ty]
+
+compression=[0.1,0.25,0.5,0.75,0.9]
+methods=['tucker','tt', 'nd']
+decompose=True
+
+#create loop with all values to be determined
+#cp decomposition
+for feature in [6,8]:
+    img_h=feature
+    img_w=img_h
+    cnn_dict.update({"img_h": img_h})
+    cnn_dict.update({"img_w": img_w})
+    
+    with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+        x = pickle.load(f)
+
+    x=x.float()
+    x=x.cuda()
+    
+    for method in methods:
+        if method=='nd':
+            for ind in [1,2]:
+                fact_dict={"decompose":False, "factorization":'c', "rank":0}
+                fact_dict.update({'index':ind})
+                model=run_model(x,cnn_dict,fact_dict)
+        else:
+            for c in compression:
+                fact_dict={"decompose":decompose,
+                            "factorization": method,
+                            "rank" : c}
+                for ind in [1,2]:
                     fact_dict.update({'index':ind})
                     model=run_model(x,cnn_dict,fact_dict)            
 # #tucker
