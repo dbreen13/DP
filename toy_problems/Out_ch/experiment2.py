@@ -116,6 +116,7 @@ def run_model(x,cnn_dict, fact_dict):
         logger.info(f"dec-start-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
     else:
         logger.info(f"bas-start-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
+    
     with torch.no_grad():
         for _ in tqdm(range(m), desc="Forward Iterations"):
             output = model(Variable(x))
@@ -176,7 +177,7 @@ decompose=True
 #cp decomposition
 for out_ch in [192,256,320,384]:
     cnn_dict.update({"out_channels": out_ch})
-    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
@@ -184,7 +185,7 @@ for out_ch in [192,256,320,384]:
     
     for method in methods:
         if method=='nd':
-            for ind in [1,2,3]:
+            for ind in [1,2]:
                 fact_dict={"decompose":False, "factorization":'c', "rank":0}
                 fact_dict.update({'index':ind})
                 model=run_model(x,cnn_dict,fact_dict)
@@ -193,7 +194,7 @@ for out_ch in [192,256,320,384]:
                 fact_dict={"decompose":decompose,
                             "factorization": method,
                             "rank" : c}
-                for ind in [1,2,3]:
+                for ind in [1,2]:
                     fact_dict.update({'index':ind})
                     model=run_model(x,cnn_dict,fact_dict)
 
