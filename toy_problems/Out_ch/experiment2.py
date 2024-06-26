@@ -121,21 +121,21 @@ def run_model(x,cnn_dict, fact_dict):
         for _ in tqdm(range(m), desc="Forward Iterations"):
             output = model(Variable(x))
     
-            batch_size, num_channels, height, width = output.size()
+#            batch_size, num_channels, height, width = output.size()
     
-            criterion = nn.CrossEntropyLoss()
-            labels = torch.randint(low=0, high=num_classes, size=(batch_size,), dtype=torch.long)
+ #           criterion = nn.CrossEntropyLoss()
+  #          labels = torch.randint(low=0, high=num_classes, size=(batch_size,), dtype=torch.long)
     
             # Reshape labels to have the same spatial dimensions as the output tensor
-            labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
-            optimizer.zero_grad()
-            labels=labels.cuda()
+   #         labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
+    #        optimizer.zero_grad()
+      #      labels=labels.cuda()
             # Compute the loss directly on reshaped output
-            loss = criterion(output, Variable(labels))
+     #       loss = criterion(output, Variable(labels))
             
             # Backward pass
-            loss.backward()
-            optimizer.step() 
+       #     loss.backward()
+        #    optimizer.step() 
         if decompose==True:
             logger.info(f"dec-end-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
         else:
@@ -155,7 +155,7 @@ stride=2
 in_chan=192
 batch=128
 num_classes=10
-n_epochs=50000
+n_epochs=580000
 lr=1e-5
 
 cnn_dict={"in_channels": in_chan,
