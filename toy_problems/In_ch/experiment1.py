@@ -168,8 +168,8 @@ cnn_dict={"out_channels": out_chan,
           "stride": stride,
           "padding": padding}
 
-compression=[0.1,0.25,0.5,0.75,0.9]
-methods=['tucker','tt', 'nd','cp']
+compression=[0.9]
+methods=['cp']
 decompose=True
 
 #create loop with all values to be determined
