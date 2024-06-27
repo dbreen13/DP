@@ -120,21 +120,21 @@ def run_model(x,cnn_dict, fact_dict):
         for _ in tqdm(range(m), desc="Forward Iterations"):
             output = model(Variable(x))
     
-            batch_size, num_channels, height, width = output.size()
+            # batch_size, num_channels, height, width = output.size()
     
-            criterion = nn.CrossEntropyLoss()
-            labels = torch.randint(low=0, high=num_classes, size=(batch_size,), dtype=torch.long)
+            # criterion = nn.CrossEntropyLoss()
+            # labels = torch.randint(low=0, high=num_classes, size=(batch_size,), dtype=torch.long)
     
-            # Reshape labels to have the same spatial dimensions as the output tensor
-            labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
-            optimizer.zero_grad()
-            labels=labels.cuda()
-            # Compute the loss directly on reshaped output
-            loss = criterion(output, Variable(labels))
+            # # Reshape labels to have the same spatial dimensions as the output tensor
+            # labels = labels.view(batch_size, 1, 1).expand(batch_size, height, width)
+            # optimizer.zero_grad()
+            # labels=labels.cuda()
+            # # Compute the loss directly on reshaped output
+            # loss = criterion(output, Variable(labels))
             
-            # Backward pass
-            loss.backward()
-            optimizer.step() 
+            # # Backward pass
+            # loss.backward()
+            # optimizer.step() 
         if decompose==True:
             logger.info(f"dec-end-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
         else:
@@ -154,7 +154,7 @@ in_chan=384
 out_ch=512
 batch=128
 num_classes=10
-n_epochs=70000
+n_epochs=580000
 lr=1e-5
 
 cnn_dict={"in_channels": in_chan,
@@ -176,7 +176,7 @@ decompose=True
 #cp decomposition
 for kernel in [1,3,5]:
     cnn_dict.update({"kernel_size": kernel})
-    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
@@ -184,7 +184,7 @@ for kernel in [1,3,5]:
     
     for method in methods:
         if method=='nd':
-            for ind in [1,2,3]:
+            for ind in [1,2]:
                 fact_dict={"decompose":False, "factorization":'c', "rank":0}
                 fact_dict.update({'index':ind})
                 model=run_model(x,cnn_dict,fact_dict)
@@ -193,7 +193,7 @@ for kernel in [1,3,5]:
                 fact_dict={"decompose":decompose,
                             "factorization": method,
                             "rank" : c}
-                for ind in [1,2,3]:
+                for ind in [1,2]:
                     fact_dict.update({'index':ind})
                     model=run_model(x,cnn_dict,fact_dict)
 
