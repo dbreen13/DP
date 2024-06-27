@@ -176,7 +176,7 @@ decompose=True
 #cp decomposition
 for in_ch in [192,256,320,384]:
     cnn_dict.update({"in_channels": in_ch})
-    with open(f'/home/dbreen/Documents/DP/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
+    with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
 
     x=x.float()
