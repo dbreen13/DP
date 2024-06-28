@@ -113,7 +113,7 @@ def run_model(x,cnn_dict, fact_dict):
     timers.sleep(sec_wait)
     start_training = perf_counter()
     if decompose==True:
-        logger.info(f"dec-start-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
+        logger.info(f"dec-start-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-kernel{kernel_size}-ind{ind}s")
     else:
         logger.info(f"bas-start-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
     with torch.no_grad():
@@ -136,7 +136,7 @@ def run_model(x,cnn_dict, fact_dict):
             # loss.backward()
             # optimizer.step() 
         if decompose==True:
-            logger.info(f"dec-end-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-ind{ind}s")
+            logger.info(f"dec-end-outch{out_channels}-inch{in_channels}-fact{factorization}-r{rank}-wh{img_w}-kernel{kernel_size}-ind{ind}s")
         else:
             logger.info(f"bas-end-outch{out_channels}-inch{in_channels}-wh{img_w}-ind{ind}s")
     end_training = perf_counter()
@@ -168,13 +168,13 @@ cnn_dict={"in_channels": in_chan,
           "stride": stride,
           "padding": padding}
 
-compression=[0.1,0.25,0.5,0.75,0.9]
+compression=[0.75,0.9]
 methods=['tucker','tt', 'nd','cp']
 decompose=True
 
 #create loop with all values to be determined
 #cp decomposition
-for kernel in [1,3,5]:
+for kernel in [3]:
     cnn_dict.update({"kernel_size": kernel})
     with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
         x = pickle.load(f)
@@ -196,7 +196,36 @@ for kernel in [1,3,5]:
                 for ind in [1,2]:
                     fact_dict.update({'index':ind})
                     model=run_model(x,cnn_dict,fact_dict)
+                    
+                    
+compression=[0.1,0.25,0.5,0.75,0.9]
+methods=['tucker','tt', 'nd','cp']
+decompose=True
 
+#create loop with all values to be determined
+#cp decomposition
+for kernel in [5]:
+    cnn_dict.update({"kernel_size": kernel})
+    with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+        x = pickle.load(f)
+
+    x=x.float()
+    x=x.cuda()
+    
+    for method in methods:
+        if method=='nd':
+            for ind in [1,2]:
+                fact_dict={"decompose":False, "factorization":'c', "rank":0}
+                fact_dict.update({'index':ind})
+                model=run_model(x,cnn_dict,fact_dict)
+        else:
+            for c in compression:
+                fact_dict={"decompose":decompose,
+                            "factorization": method,
+                            "rank" : c}
+                for ind in [1,2]:
+                    fact_dict.update({'index':ind})
+                    model=run_model(x,cnn_dict,fact_dict)
 # #tucker
 # for in_ch in [16,32,64,128]:
 #     cnn_dict.update({"in_channels": in_ch})
