@@ -197,9 +197,11 @@ for kernel in [1,3,5]:
             fact_dict={"decompose":False, "factorization":'c', "rank":0}
             for ind in [1]:
                 fact_dict.update({'index':ind})
+                print(f'bas-outch{out_chan}-inch{in_chan}-wh{img_w}')
                 model, mem=run_model(x,cnn_dict,fact_dict)
-                key=f'bas-outch{out_chan}-inch{in_chan}-kern{kernel}'
+                key=f'bas-outch{out_chan}-inch{in_chan}-wh{img_w}'
                 mem_dict[key]={'Mem': np.round(mem*n,decimals=3)}
+
         else:
             for c in compression:
                 fact_dict={"decompose":decompose,
@@ -207,14 +209,16 @@ for kernel in [1,3,5]:
                             "rank" : c}
                 for ind in [1]:
                     fact_dict.update({'index':ind})
-                    print(f'outch{out_chan}-inch{in_chan}-fact{method}-r{c}-wh{img_w}-kern{kernel}')
+                    print(f'outch{out_chan}-inch{in_chan}-fact{method}-r{c}-wh{img_w}')
                     model, mem=run_model(x,cnn_dict,fact_dict)
-                    key=f'outch{out_chan}-inch{in_chan}-fact{method}-r{c}-wh{img_w}-kern{kernel}'
+                    print(mem)
+                    key=f'outch{out_chan}-inch{in_chan}-fact{method}-r{c}-wh{img_w}'
                     mem_dict[key]={'Mem': np.round(mem*n,decimals=3)}
+
             
 df = pd.DataFrame.from_dict(mem_dict, orient='index', columns=['Mem'])
 
-save_path = "mem_kern.pkl"
+
+save_path = "mem_bas_kern.pkl"
 with open(save_path, 'wb') as f:
     pickle.dump(df, f)
-
