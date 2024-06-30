@@ -17,6 +17,8 @@ transform = transforms.Compose([
     transforms.Normalize(mean_CIFAR10, std_CIFAR10),
 ])
 
+torch.manual_seed(1)
+
 testset = datasets.CIFAR10(root='/home/dbreen/Documents/tddl/bigdata/cifar10', train=True, download=False, transform=transform)
 
 batch_size = 128
@@ -46,7 +48,7 @@ if not any(isinstance(handler, logging.FileHandler) for handler in loading_logge
 
 layers=[63,57,51,47,41,35,28,25,19,6]
 compression = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
-methods = ['tt']
+methods = ['tucker']
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -134,7 +136,7 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle
 classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 
-for method in ['cp','tucker']:
+for method in ['tucker']:
     for layer in layers:
         for compr in compression:
             for runnr in ['runnr1', 'runnr2', 'runnr3', 'runnr4', 'runnr5']:
