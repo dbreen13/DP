@@ -180,7 +180,7 @@ cnn_dict={"in_channels": in_ch,
           "padding": padding}
 
 compression=[0.1,0.25,0.5,0.75,0.9]
-methods=['tucker','tt','cp']
+methods=['nd']
 decompose=True
 
 
@@ -196,21 +196,34 @@ for out_ch in [384,320,256,192]:
     x=x.float()
     x=x.cuda()
     for method in methods:
-        for c in compression:
-            fact_dict={"decompose":decompose,
-                        "factorization": method,
-                        "rank" : c}
+        if method=='nd':
+            fact_dict={"decompose":False, "factorization":'c', "rank":0}
             for ind in [1]:
                 fact_dict.update({'index':ind})
-                print(f'outch{out_ch}-inch{in_ch}-fact{method}-r{c}-wh{img_w}')
+                print(f'bas-outch{out_ch}-inch{in_ch}-wh{img_w}')
                 model, mem=run_model(x,cnn_dict,fact_dict)
-                key=f'outch{out_ch}-inch{in_ch}-fact{method}-r{c}-wh{img_w}'
+                key=f'bas-outch{out_ch}-inch{in_ch}-wh{img_w}'
                 mem_dict[key]={'Mem': np.round(mem*n,decimals=3)}
 
+        else:
+            for c in compression:
+                fact_dict={"decompose":decompose,
+                            "factorization": method,
+                            "rank" : c}
+                for ind in [1]:
+                    fact_dict.update({'index':ind})
+                    print(f'outch{out_ch}-inch{in_ch}-fact{method}-r{c}-wh{img_w}')
+                    model, mem=run_model(x,cnn_dict,fact_dict)
+                    print(mem)
+                    key=f'outch{out_ch}-inch{in_ch}-fact{method}-r{c}-wh{img_w}'
+                    mem_dict[key]={'Mem': np.round(mem*n,decimals=3)}
 
+            
 df = pd.DataFrame.from_dict(mem_dict, orient='index', columns=['Mem'])
 
-save_path = "mem_outch.pkl"
+
+save_path = "mem_bas_outch.pkl"
 with open(save_path, 'wb') as f:
     pickle.dump(df, f)
+
 
