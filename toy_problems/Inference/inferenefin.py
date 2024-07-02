@@ -46,9 +46,7 @@ if not any(isinstance(handler, logging.FileHandler) for handler in loading_logge
     fh_loading.setFormatter(formatter_loading)
     loading_logger.addHandler(fh_loading)
 
-layers=[63,57,51,47,41,35,28,25,19,6]
-compression = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
-methods = ['tucker']
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -135,6 +133,57 @@ batch_size = 128
 testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=8)
 classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
+
+
+layers=[25]
+compression = [0.4,0.5,0.6,0.7,0.8,0.9]
+methods = ['tucker']
+
+for method in ['tucker']:
+    for layer in layers:
+        for compr in compression:
+            for runnr in ['runnr1', 'runnr2', 'runnr3', 'runnr4', 'runnr5']:
+                path = f"/media/jkooij/d63a895a-7e13-4bf0-a13d-1a6678dc0e38/dbreen/bigdata/cifar10/logs/rn18/decomposed/fact-{method}-r{compr}-lay[{layer}]-b128/{runnr}/rn18-lr-[{layer}]-{method}-{compr}-dTrue-iNone_bn_128_sgd_l1e-05_g0.0_sFalse/fact_model_final.pth"
+                loading_logger.info(f'Trying to load model from {path}')
+                
+                model = load_model(path)
+                if model is not None:
+                    break
+            else:
+                error_files.append(path)
+                continue  # Skip to the next iteration if no model could be loaded
+            
+            model.to(device)
+            correct = 0
+            total = 0
+
+            with torch.no_grad():
+                for i in [1, 2, 3]:
+                    timers.sleep(60)
+                    now = datetime.now()
+                    sec_wait = 60 - now.second
+                    timers.sleep(sec_wait)
+    
+                    inference_logger.info(f'start-inf-{method}-r{compr}-lay[{layer}]-ind{i}')
+                    for s in range(100):
+                        t = tqdm(testloader, total=int(len(testloader)))
+                        for s, data in enumerate(t):
+                            images, labels = data
+                            images = images.to(device)  # Move input data to the same device as the model
+                            labels = labels.to(device)  # Move labels to the same device as the model
+                            outputs = model(images)  # calculate outputs by running images through the network
+                            _, predicted = torch.max(outputs.data, 1)  # the class with the highest energy is what we choose as prediction
+                            total += labels.size(0)
+                            correct += (predicted == labels).sum().item()
+                    inference_logger.info(f'end-inf-{method}-r{compr}-lay[{layer}]-ind{i}')
+            
+            # Clear memory after each iteration
+            del model
+            torch.cuda.empty_cache()
+
+layers=[19,6]
+compression = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+methods = ['tucker']
 
 for method in ['tucker']:
     for layer in layers:
