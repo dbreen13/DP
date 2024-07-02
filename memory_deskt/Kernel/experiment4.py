@@ -197,9 +197,9 @@ for kernel in [1,3,5]:
             fact_dict={"decompose":False, "factorization":'c', "rank":0}
             for ind in [1]:
                 fact_dict.update({'index':ind})
-                print(f'bas-outch{out_chan}-inch{in_chan}-wh{img_w}')
+                print(f'bas-outch{out_chan}-inch{in_chan}-wh{img_w}-kern{kernel}')
                 model, mem=run_model(x,cnn_dict,fact_dict)
-                key=f'bas-outch{out_chan}-inch{in_chan}-wh{img_w}'
+                key=f'bas-outch{out_chan}-inch{in_chan}-wh{img_w}-kern{kernel}'
                 mem_dict[key]={'Mem': np.round(mem*n,decimals=3)}
 
         else:
