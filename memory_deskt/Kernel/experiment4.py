@@ -217,7 +217,7 @@ for kernel in [1,3,5]:
 
             
 df = pd.DataFrame.from_dict(mem_dict, orient='index', columns=['Mem'])
-
+print(df)
 
 save_path = "mem_bas_kern.pkl"
 with open(save_path, 'wb') as f:
