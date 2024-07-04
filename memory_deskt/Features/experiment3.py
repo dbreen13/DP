@@ -182,7 +182,7 @@ cnn_dict={"in_channels": in_chan,
           "padding": padding}
 
 compression=[0.1,0.25,0.5,0.75,0.9]
-methods=['tucker','tt', 'cp']
+methods=['nd','tucker','tt', 'cp']
 decompose=True
 
 #create loop with all values to be determined
@@ -253,7 +253,7 @@ cnn_dict={"in_channels": in_chan,
           "padding": padding}
 
 compression=[0.1,0.25,0.5,0.75,0.9]
-methods=['tucker','tt', 'cp']
+methods=['nd','tucker','tt', 'cp']
 decompose=True
 
 #create loop with all values to be determined

@@ -168,38 +168,8 @@ cnn_dict={"in_channels": in_chan,
           "stride": stride,
           "padding": padding}
 
-compression=[0.75,0.9]
-methods=['cp']
-decompose=True
-
-#create loop with all values to be determined
-#cp decomposition
-for kernel in [3]:
-    cnn_dict.update({"kernel_size": kernel})
-    with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
-        x = pickle.load(f)
-
-    x=x.float()
-    x=x.cuda()
-    
-    for method in methods:
-        if method=='nd':
-            for ind in [1,2]:
-                fact_dict={"decompose":False, "factorization":'c', "rank":0}
-                fact_dict.update({'index':ind})
-                model=run_model(x,cnn_dict,fact_dict)
-        else:
-            for c in compression:
-                fact_dict={"decompose":decompose,
-                            "factorization": method,
-                            "rank" : c}
-                for ind in [1,2]:
-                    fact_dict.update({'index':ind})
-                    model=run_model(x,cnn_dict,fact_dict)
-                    
-                    
 compression=[0.1,0.25,0.5,0.75,0.9]
-methods=['tucker','tt', 'nd','cp']
+methods=['nd', 'tucker', 'tt', 'cp']
 decompose=True
 
 #create loop with all values to be determined
@@ -214,7 +184,7 @@ for kernel in [5]:
     
     for method in methods:
         if method=='nd':
-            for ind in [1,2]:
+            for ind in [3]:
                 fact_dict={"decompose":False, "factorization":'c', "rank":0}
                 fact_dict.update({'index':ind})
                 model=run_model(x,cnn_dict,fact_dict)
@@ -223,10 +193,40 @@ for kernel in [5]:
                 fact_dict={"decompose":decompose,
                             "factorization": method,
                             "rank" : c}
-                for ind in [1,2]:
+                for ind in [3]:
                     fact_dict.update({'index':ind})
                     model=run_model(x,cnn_dict,fact_dict)
-# #tucker
+                    
+                    
+#compression=[0.1,0.25,0.5,0.75,0.9]
+#methods=['tucker','tt', 'nd','cp']
+#decompose=True
+
+#create loop with all values to be determined
+#cp decomposition
+#for kernel in [5]:
+#    cnn_dict.update({"kernel_size": kernel})
+ #   with open(f'/home/dbreen/Documents/DP2/DP/toy_problems/Data/inch{in_chan}-wh{img_h}.pkl','rb') as f:  
+  #      x = pickle.load(f)
+#
+ #   x=x.float()
+  #  x=x.cuda()
+    
+   # for method in methods:
+    #3    if method=='nd':
+     #      for ind in [1,2]:
+      #          fact_dict={"decompose":False, "factorization":'c', "rank":0}
+       #         fact_dict.update({'index':ind})
+        #        model=run_model(x,cnn_dict,fact_dict)
+       # else:
+        #    for c in compression:
+         #       fact_dict={"decompose":decompose,
+          #                  "factorization": method,
+           #                 "rank" : c}
+            #    for ind in [1,2]:
+             #       fact_dict.update({'index':ind})
+              #      model=run_model(x,cnn_dict,fact_dict)
+# #tucker#
 # for in_ch in [16,32,64,128]:
 #     cnn_dict.update({"in_channels": in_ch})
 #     with open(f'/home/dbreen/Documents/tddl/toy_problems/Data/inch{in_ch}-wh{img_h}.pkl','rb') as f:  
