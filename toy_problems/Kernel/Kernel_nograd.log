@@ -166,3 +166,17 @@
 2024-07-04 12:56:00,241 - Layer_fin - INFO - dec-start-outch512-inch384-facttucker-r0.75-wh4-kernel5-ind3s
 2024-07-04 14:05:10,482 - Layer_fin - INFO - dec-end-outch512-inch384-facttucker-r0.75-wh4-kernel5-ind3s
 2024-07-04 14:07:00,686 - Layer_fin - INFO - dec-start-outch512-inch384-facttucker-r0.9-wh4-kernel5-ind3s
+2024-07-04 15:25:53,572 - Layer_fin - INFO - dec-end-outch512-inch384-facttucker-r0.9-wh4-kernel5-ind3s
+2024-07-04 15:27:00,978 - Layer_fin - INFO - dec-start-outch512-inch384-facttt-r0.1-wh4-kernel5-ind3s
+2024-07-04 15:37:00,198 - Layer_fin - INFO - dec-end-outch512-inch384-facttt-r0.1-wh4-kernel5-ind3s
+2024-07-04 15:39:00,137 - Layer_fin - INFO - dec-start-outch512-inch384-facttt-r0.25-wh4-kernel5-ind3s
+2024-07-04 15:50:42,754 - Layer_fin - INFO - dec-end-outch512-inch384-facttt-r0.25-wh4-kernel5-ind3s
+2024-07-04 15:52:00,800 - Layer_fin - INFO - dec-start-outch512-inch384-facttt-r0.5-wh4-kernel5-ind3s
+2024-07-04 16:06:04,660 - Layer_fin - INFO - dec-end-outch512-inch384-facttt-r0.5-wh4-kernel5-ind3s
+2024-07-04 16:08:00,935 - Layer_fin - INFO - dec-start-outch512-inch384-facttt-r0.75-wh4-kernel5-ind3s
+2024-07-04 16:23:58,299 - Layer_fin - INFO - dec-end-outch512-inch384-facttt-r0.75-wh4-kernel5-ind3s
+2024-07-04 16:25:00,537 - Layer_fin - INFO - dec-start-outch512-inch384-facttt-r0.9-wh4-kernel5-ind3s
+2024-07-04 16:41:59,611 - Layer_fin - INFO - dec-end-outch512-inch384-facttt-r0.9-wh4-kernel5-ind3s
+2024-07-04 16:44:00,228 - Layer_fin - INFO - dec-start-outch512-inch384-factcp-r0.1-wh4-kernel5-ind3s
+2024-07-04 17:12:16,174 - Layer_fin - INFO - dec-end-outch512-inch384-factcp-r0.1-wh4-kernel5-ind3s
+2024-07-04 17:16:00,699 - Layer_fin - INFO - dec-start-outch512-inch384-factcp-r0.25-wh4-kernel5-ind3s
